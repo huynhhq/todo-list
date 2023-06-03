@@ -7,7 +7,7 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { RootStackParamList } from 'root-stack-params';
 import { setTopLevelNavigator } from '@helpers/navigation';
 
-import { HomePage } from '@containers';
+import { HomePage, TaskManagementPage } from '@containers';
 import ModalStackNavigator from './ModalStack';
 
 const RootStack = createStackNavigator<RootStackParamList>();
@@ -32,13 +32,19 @@ export const RootNavigator = () => {
 				<RootStack.Navigator
 					screenOptions={{
 						headerShown: false,
-						// presentation: 'modal',
+						presentation: 'card',
+						gestureDirection: 'vertical',
 					}}
 					initialRouteName={'home'}
 				>
 					<RootStack.Screen
 						name="home"
 						component={HomePage}
+						options={{ headerShown: false }}
+					/>
+					<RootStack.Screen
+						name="taskManagement"
+						component={TaskManagementPage}
 						options={{ headerShown: false }}
 					/>
 					<RootStack.Screen

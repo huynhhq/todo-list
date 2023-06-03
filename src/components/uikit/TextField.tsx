@@ -369,7 +369,7 @@ export default memo(
 const styles = StyleSheet.create({
 	input: {
 		color: COLORS.white,
-		fontSize: FONT_SIZE.BIGGEST,
+		fontSize: FONT_SIZE.NORMAL,
 		fontWeight: '200',
 	},
 	clearButton: {

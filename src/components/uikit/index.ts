@@ -4,12 +4,13 @@ import Image from './image';
 import Error from './error';
 import Button from './button';
 import Divider from './divider';
+import FlatList from './flatList';
+import TextField from './TextField';
 import Container from './container';
 import Touchable from './touchable';
 import ScrollView from './scrollview';
 import VectorIcons from './vectorIcons';
 import KeyboardAvoidingView from './keyboardAvoidingView';
-import TextField from './TextField';
 
 import commonStyles from './styles';
 
@@ -27,4 +28,5 @@ export {
 	Button,
 	ScrollView,
 	TextField,
+	FlatList,
 };

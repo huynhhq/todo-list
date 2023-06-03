@@ -79,12 +79,23 @@ declare module 'custom-ui-kit' {
 	}
 }
 declare module 'root-stack-params' {
+	import { Task, Category } from '@models';
+
 	export type RootStackParamList = {
 		home: undefined;
+		taskManagement: {
+			category: Category;
+			index: number;
+		};
 		modal: ModalStackParamList;
 	};
 
 	export type ModalStackParamList = {
 		addCategory: undefined;
+		addTask: {
+			task: Task;
+			color: string;
+			index: number;
+		};
 	};
 }

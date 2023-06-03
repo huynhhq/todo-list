@@ -12,6 +12,7 @@ type Props = {
 	iconSize?: number;
 	color: string;
 	provider?: VectorIconProvider;
+	onPress: () => void;
 };
 
 const CategoryItem: React.FC<Props> = ({
@@ -21,9 +22,10 @@ const CategoryItem: React.FC<Props> = ({
 	color,
 	iconSize = 20,
 	provider = 'Ionicons',
+	onPress,
 }) => {
 	return (
-		<Touchable style={styles.container}>
+		<Touchable style={styles.container} onPress={onPress}>
 			<View flex flexD="row" alignItems>
 				<VectorIcons
 					name={icon}
