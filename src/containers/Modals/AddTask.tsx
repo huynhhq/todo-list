@@ -73,7 +73,7 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 				},
 			],
 		);
-	}, [index, myCategoryList, setMyCategoryList, task, taskName]);
+	}, [index, mode, myCategoryList, setMyCategoryList, task, taskName]);
 
 	return (
 		<ScrollView contentContainerStyle={{ flexGrow: 1 }}>

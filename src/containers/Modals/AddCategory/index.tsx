@@ -7,8 +7,11 @@ import { RouteProp } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 
 // Utilities
+import { MY_CATEGORY_LIST } from '@states';
+import { Category } from '@models/Category';
 import { goBack } from '@helpers/navigation';
 import { COLORS, DIMS, FONT_SIZE } from '@values';
+import { PrototypeManager } from '@helpers/prototype';
 import { ICON_NAMES, SAMPLE_COLOR } from './constants';
 import { ModalStackParamList } from 'root-stack-params';
 
@@ -23,46 +26,79 @@ import {
 	VectorIcons,
 	TextField,
 } from '@components/uikit';
-import { MY_CATEGORY_LIST } from '@states';
-import { Category } from '@models/Category';
-import { PrototypeManager } from '@helpers/prototype';
 
 interface Props extends StackScreenProps<ModalStackParamList> {
 	route: RouteProp<ModalStackParamList, 'addCategory'>;
 }
 
-const FuncComponent: React.FC<Props> = () => {
+const FuncComponent: React.FC<Props> = ({ route }) => {
+	const { category } = route.params;
+	const mode = !category ? 'new' : 'edit';
+
 	const [myCategoryList, setMyCategoryList] = useRecoilState(
 		MY_CATEGORY_LIST({}),
 	);
 
-	const [color, setColor] = useState<string>(SAMPLE_COLOR[0]);
-	const [iconName, setIconName] = useState<string>(ICON_NAMES[0]);
-	const [categoryName, setCategoryName] = useState<string>('');
+	const [color, setColor] = useState<string>(
+		category ? category.color : SAMPLE_COLOR[0],
+	);
+	const [iconName, setIconName] = useState<string>(
+		category ? category.icon : ICON_NAMES[0],
+	);
+	const [categoryName, setCategoryName] = useState<string>(
+		category ? category.name : '',
+	);
 
 	const onSubmit = useCallback(() => {
 		let myTempList: Category[] = [];
 		if (myCategoryList) {
 			myTempList = [...myCategoryList];
 		}
-		myTempList.push({
-			id: PrototypeManager.number.uuidv4(),
-			name: categoryName,
-			icon: iconName,
-			color,
-			tasks: [],
-		});
+		if (mode === 'new') {
+			myTempList.push({
+				id: PrototypeManager.number.uuidv4(),
+				name: categoryName,
+				icon: iconName,
+				color,
+				tasks: [],
+			});
+		} else {
+			myTempList = myTempList.map(item => {
+				if (item.id === category?.id) {
+					return {
+						...item,
+						name: categoryName,
+						color,
+						icon: iconName,
+					};
+				} else {
+					return item;
+				}
+			});
+		}
 		setMyCategoryList(myTempList);
-		Alert.alert('Success', 'Added successfully', [
-			{
-				text: 'OK',
-				onPress: () => goBack(),
-			},
-		]);
-	}, [categoryName, color, iconName, myCategoryList, setMyCategoryList]);
+		Alert.alert(
+			'Success',
+			mode === 'new' ? 'Added successfully' : 'Edited successfully',
+			[
+				{
+					text: 'OK',
+					onPress: () => goBack(),
+				},
+			],
+		);
+	}, [
+		category?.id,
+		categoryName,
+		color,
+		iconName,
+		mode,
+		myCategoryList,
+		setMyCategoryList,
+	]);
 
 	return (
-		<ScrollView>
+		<ScrollView contentContainerStyle={{ flexGrow: 1 }}>
 			<View style={styles.wrapper}>
 				<View style={styles.header}>
 					<Touchable onPress={() => goBack()}>

@@ -91,7 +91,9 @@ declare module 'root-stack-params' {
 	};
 
 	export type ModalStackParamList = {
-		addCategory: undefined;
+		addCategory: {
+			category?: Category;
+		};
 		addTask: {
 			task: Task;
 			color: string;
