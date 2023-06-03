@@ -27,7 +27,11 @@
           "@hocs": ["./src/hocs"],
           "@hocs/": ["./src/hocs/"],
           "@hooks": ["./src/hooks"],
-          "@hooks/": ["./src/hooks/"]
+          "@hooks/": ["./src/hooks/"],
+          "@states": ["./src/states"],
+          "@states/": ["./src/states/"],
+          "@models": ["./src/models"],
+          "@models/": ["./src/models/"]
         }
       }
     ]
