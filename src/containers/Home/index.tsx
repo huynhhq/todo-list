@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 // Libraries
 import moment from 'moment';
@@ -19,17 +19,15 @@ import {
 	View,
 	commonStyles,
 } from '@components/uikit';
+import { goModal } from '@helpers/navigation';
 
 const FuncComponent: React.FC = () => {
 	const data = useRecoilValue(MY_CATEGORY_LIST({}));
 
-	const [currentTasks, setcurrentTasks] = useState<Task[]>([]);
-	const [tentativeScheduleTasks, setTentativeScheduleTasks] = useState<Task[]>(
-		[],
-	);
 	useEffect(() => {}, []);
 
 	const generateFixedCategories = useMemo(() => {
+		const totalTask: Task[] = [];
 		const todayTasks: Task[] = [];
 		const scheduleTasks: Task[] = [];
 
@@ -48,17 +46,16 @@ const FuncComponent: React.FC = () => {
 				} else {
 					scheduleTasks.push(currentTask);
 				}
+				totalTask.push(currentTask);
 			}
 		}
-		setcurrentTasks(todayTasks);
-		setTentativeScheduleTasks(scheduleTasks);
 
 		return (
 			<>
 				<CategoryItem
 					icon="inbox"
 					text="All"
-					count={data?.length}
+					count={totalTask.length}
 					provider="FontAwesome"
 					color={COLORS.primary}
 				/>
@@ -100,6 +97,7 @@ const FuncComponent: React.FC = () => {
 			/>
 		));
 	}, [data]);
+
 	return (
 		<Container style={commonStyles.container}>
 			<View marginB={20}>
@@ -112,7 +110,7 @@ const FuncComponent: React.FC = () => {
 				<CategoryFrame
 					title="My List"
 					iconName="squared-plus"
-					onPress={() => {}}
+					onPress={() => goModal('addCategory')}
 					color={COLORS.primary}
 				>
 					{generateMyCategories}

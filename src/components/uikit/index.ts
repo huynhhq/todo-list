@@ -9,20 +9,22 @@ import Touchable from './touchable';
 import ScrollView from './scrollview';
 import VectorIcons from './vectorIcons';
 import KeyboardAvoidingView from './keyboardAvoidingView';
+import TextField from './TextField';
 
 import commonStyles from './styles';
 
 export {
-  Container,
-  View,
-  Image,
-  Error,
-  Text,
-  Divider,
-  Touchable,
-  VectorIcons,
-  KeyboardAvoidingView,
-  commonStyles,
-  Button,
-  ScrollView
+	Container,
+	View,
+	Image,
+	Error,
+	Text,
+	Divider,
+	Touchable,
+	VectorIcons,
+	KeyboardAvoidingView,
+	commonStyles,
+	Button,
+	ScrollView,
+	TextField,
 };

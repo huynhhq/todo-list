@@ -1,9 +1,9 @@
-import {Task} from './Task';
+import { Task } from './Task';
 
 export interface Category {
-  id: number;
-  name: string;
-  icon: string;
-  color: string;
-  tasks: Task[];
+	id: string;
+	name: string;
+	icon: string;
+	color: string;
+	tasks: Task[];
 }
