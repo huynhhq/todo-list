@@ -31,12 +31,7 @@ const CategoryFrame = memo((props: PropsWithChildren<ICategoryFrame>) => {
 	} = props;
 	return (
 		<View style={[style, styles.container]}>
-			<View
-				flexD="row"
-				paddingH={DIMS.padding}
-				paddingB={DIMS.padding}
-				alignItems="center"
-			>
+			<View flexD="row" paddingH={DIMS.padding} alignItems="center">
 				{title && (
 					<View style={styles.titleContainer}>
 						<Text color={COLORS.mainGray} fontSize={FONT_SIZE.NORMAL}>
@@ -68,7 +63,6 @@ export default CategoryFrame;
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: '#1C1C1E',
-		paddingTop: DIMS.padding,
 		borderRadius: 10,
 		marginBottom: 50,
 	},
@@ -80,5 +74,6 @@ const styles = StyleSheet.create({
 		marginHorizontal: 4,
 		paddingHorizontal: 8,
 		justifyContent: 'center',
+		paddingTop: DIMS.padding,
 	},
 });

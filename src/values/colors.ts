@@ -41,7 +41,7 @@ export const COLORS = {
 	green: '#2faa33',
 	purple: '#cc00ff',
 	purple1: '#9F7AA7',
-	background: '#EFEFEF',
+	background: '#2c2c2e',
 	background2: '#F4F4F4',
 	gray: '#808080',
 	grayF0: '#f0f0f0',
