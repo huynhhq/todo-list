@@ -2,6 +2,10 @@ import { COLORS } from '@values';
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		zIndex: -1,
+	},
 	centerIcon: {
 		position: 'absolute',
 		top: '45%',

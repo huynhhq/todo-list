@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { ListRenderItemInfo } from 'react-native';
+import { Alert, ListRenderItemInfo } from 'react-native';
 
 // Libraries
 import { useRecoilState } from 'recoil';
@@ -10,7 +10,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { Task } from '@models/Task';
 import { MY_CATEGORY_LIST } from '@states';
 import { COLORS, FONT_SIZE } from '@values';
-import { goModal } from '@helpers/navigation';
+import { goBack, goModal } from '@helpers/navigation';
 import { PrototypeManager } from '@helpers/prototype';
 import { RootStackParamList } from 'root-stack-params';
 
@@ -34,12 +34,13 @@ interface Props extends StackScreenProps<RootStackParamList> {
 
 const FuncComponent: React.FC<Props> = ({ route }) => {
 	const { category, index } = route.params;
-	const { name, color, icon } = category;
+	const [show, setShowMenu] = useState<boolean>(false);
 	const [hideCompletedTasks, setHideCompletedTasks] = useState<boolean>(true);
 
 	const [myCategoryList, setCategoryList] = useRecoilState(
 		MY_CATEGORY_LIST({}),
 	);
+	const { name, color, icon } = myCategoryList[index];
 
 	const renderItem = useCallback(
 		(info: ListRenderItemInfo<Task>) => {
@@ -66,6 +67,7 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 					color,
 					index,
 				});
+
 			const onDelete = () => {
 				const filteredData = myCategoryList[index].tasks.filter(
 					task => task.id !== item.id,
@@ -162,10 +164,59 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 		setCategoryList,
 	]);
 
+	const deleteList = () => {
+		setShowMenu(false);
+		let myTempList = [...myCategoryList];
+		myTempList.splice(index, 1);
+		setCategoryList(myTempList);
+		goBack();
+	};
+
+	const onCancel = () => {
+		setShowMenu(false);
+	};
+
 	return (
 		<Container style={commonStyles.container}>
-			<Header title={name} color={color} />
-			<View flex>
+			<Header
+				title={name}
+				color={color}
+				showMenu={show}
+				setShowMenu={setShowMenu}
+				menus={[
+					{
+						id: 1,
+						content: 'Update list',
+						onPress: () => {
+							goModal('addCategory', {
+								category: myCategoryList[index],
+							});
+							setShowMenu(false);
+						},
+					},
+					{
+						id: 2,
+						content: 'Delete list',
+						onPress: () => {
+							Alert.alert(
+								`Are you sure to delete "${category.name}" ?`,
+								'This action will remove all reminders in this list.',
+								[
+									{
+										text: 'OK',
+										onPress: deleteList,
+									},
+									{
+										text: 'Cancel',
+										onPress: onCancel,
+									},
+								],
+							);
+						},
+					},
+				]}
+			/>
+			<View style={styles.container} onTouchEnd={() => setShowMenu(false)}>
 				<View style={styles.centerIcon}>
 					<VectorIcons
 						color={color}

@@ -7,26 +7,25 @@ import { StyleSheet } from 'react-native';
 interface Menu {
 	id: number;
 	content: string;
-	selected: boolean;
 	onPress: () => void;
 }
 
 type HeaderProps = {
 	title: string;
 	color: string;
-	isShowMenu?: boolean;
+	showMenu?: boolean;
 	menus?: Menu[];
 	onGoBack?: () => void;
-	showMenu?: (value: boolean) => void;
+	setShowMenu?: (value: boolean) => void;
 };
 
 const Header: React.FC<HeaderProps> = ({
 	title,
 	color,
 	menus,
-	isShowMenu,
-	onGoBack,
 	showMenu,
+	onGoBack,
+	setShowMenu,
 }) => {
 	const handleGoBack = useCallback(() => {
 		if (onGoBack) {
@@ -55,21 +54,23 @@ const Header: React.FC<HeaderProps> = ({
 					{title}
 				</Text>
 			</View>
-			{menus && showMenu && (
+			{menus && (
 				<Touchable
 					style={styles.rightContainer}
 					hitSlop={DIMS.hitSlop}
-					onPress={() => showMenu(true)}
+					onPress={() => {
+						setShowMenu && setShowMenu(!showMenu);
+					}}
 				>
 					<VectorIcons
 						name="ellipsis-horizontal-circle-outline"
 						color={color}
 						provider="Ionicons"
-						size={15}
+						size={25}
 					/>
 				</Touchable>
 			)}
-			{isShowMenu && menus && (
+			{showMenu && menus && (
 				<View style={styles.menu} bg={COLORS.background}>
 					{menus.map((menu, index) => (
 						<Touchable
@@ -78,12 +79,9 @@ const Header: React.FC<HeaderProps> = ({
 							paddingV={5}
 							paddingH={20}
 							hitSlop={DIMS.hitSlop}
-							bg={menu.selected ? COLORS.mainGray : COLORS.background}
 							onPress={() => menu.onPress()}
 						>
-							<Text fontSize={FONT_SIZE.BIGGER} bold={menu.selected}>
-								{menu.content}
-							</Text>
+							<Text color={COLORS.lightGray}>{menu.content}</Text>
 						</Touchable>
 					))}
 				</View>
@@ -120,8 +118,9 @@ const styles = StyleSheet.create({
 	menu: {
 		position: 'absolute',
 		right: 0,
-		top: 25,
+		top: 45,
 		paddingVertical: 20,
-		zIndex: 999,
+		zIndex: Number.MAX_VALUE,
+		borderRadius: DIMS.br,
 	},
 });
