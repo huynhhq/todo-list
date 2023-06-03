@@ -27,7 +27,7 @@ export default StyleSheet.create({
     flex: 1,
     paddingBottom: 24,
     paddingHorizontal: 24,
-    backgroundColor: 'black'
+    backgroundColor: COLORS.black
   },
   padding: {
     padding: DIMS.padding,

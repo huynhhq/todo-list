@@ -6,6 +6,7 @@ import Button from './button';
 import Divider from './divider';
 import Container from './container';
 import Touchable from './touchable';
+import ScrollView from './scrollview';
 import VectorIcons from './vectorIcons';
 import KeyboardAvoidingView from './keyboardAvoidingView';
 
@@ -23,4 +24,5 @@ export {
   KeyboardAvoidingView,
   commonStyles,
   Button,
+  ScrollView
 };
