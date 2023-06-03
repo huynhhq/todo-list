@@ -7,62 +7,76 @@ import { RouteProp } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 
 // Utilities
+import { MY_CATEGORY_LIST } from '@states';
 import { goBack } from '@helpers/navigation';
 import { COLORS, DIMS, FONT_SIZE } from '@values';
-import { ICON_NAMES, SAMPLE_COLOR } from './constants';
 import { ModalStackParamList } from 'root-stack-params';
 
 // UI components
-import IconPicker from './components/IconPicker';
-import ColorPicker from './components/ColorPicker';
 import {
+	ScrollView,
 	Touchable,
+	VectorIcons,
 	View,
 	Text,
-	ScrollView,
-	VectorIcons,
 	TextField,
 } from '@components/uikit';
-import { MY_CATEGORY_LIST } from '@states';
-import { Category } from '@models/Category';
-import { PrototypeManager } from '@helpers/prototype';
 
 interface Props extends StackScreenProps<ModalStackParamList> {
-	route: RouteProp<ModalStackParamList, 'addCategory'>;
+	route: RouteProp<ModalStackParamList, 'addTask'>;
 }
 
-const FuncComponent: React.FC<Props> = () => {
+const FuncComponent: React.FC<Props> = ({ route }) => {
+	const { task, color, index } = route.params;
+	const mode = task.content.length === 0 ? 'new' : 'edit';
+
 	const [myCategoryList, setMyCategoryList] = useRecoilState(
 		MY_CATEGORY_LIST({}),
 	);
 
-	const [color, setColor] = useState<string>(SAMPLE_COLOR[0]);
-	const [iconName, setIconName] = useState<string>(ICON_NAMES[0]);
-	const [categoryName, setCategoryName] = useState<string>('');
+	const [taskName, setTaskName] = useState<string>(task.content);
+	const [date, setDate] = useState<string | undefined>();
 
 	const onSubmit = useCallback(() => {
-		let myTempList: Category[] = [];
-		if (myCategoryList) {
-			myTempList = [...myCategoryList];
+		let myTempList = [...myCategoryList];
+		const selectedCategory = myTempList[index];
+		myTempList[index].tasks = [...selectedCategory.tasks];
+
+		// New Task Case
+		if (mode === 'new') {
+			myTempList[index].tasks.push({
+				...task,
+				content: taskName,
+			});
+		} else {
+			const processData = selectedCategory.tasks.map(currentTask => {
+				if (currentTask.id === task.id) {
+					return {
+						...task,
+						content: taskName,
+					};
+				} else {
+					return task;
+				}
+			});
+			myTempList[index].tasks = [...processData];
 		}
-		myTempList.push({
-			id: PrototypeManager.number.uuidv4(),
-			name: categoryName,
-			icon: iconName,
-			color,
-			tasks: [],
-		});
+
 		setMyCategoryList(myTempList);
-		Alert.alert('Success', 'Added successfully', [
-			{
-				text: 'OK',
-				onPress: () => goBack(),
-			},
-		]);
-	}, [categoryName, color, iconName, myCategoryList, setMyCategoryList]);
+		Alert.alert(
+			'Success',
+			mode === 'new' ? 'Added successfully' : 'Edited successfully',
+			[
+				{
+					text: 'OK',
+					onPress: () => goBack(),
+				},
+			],
+		);
+	}, [index, myCategoryList, setMyCategoryList, task, taskName]);
 
 	return (
-		<ScrollView>
+		<ScrollView contentContainerStyle={{ flexGrow: 1 }}>
 			<View style={styles.wrapper}>
 				<View style={styles.header}>
 					<Touchable onPress={() => goBack()}>
@@ -73,17 +87,14 @@ const FuncComponent: React.FC<Props> = () => {
 							size={30}
 						/>
 					</Touchable>
-					<VectorIcons
-						name={iconName}
-						size={30}
-						color={color}
-						provider="FontAwesome"
-					/>
-					<Touchable onPress={onSubmit} disabled={categoryName.length === 0}>
+					<Text color={color} fontSize={FONT_SIZE.BIG}>
+						{task.content.length !== 0 ? 'Edit Reminder' : 'New reminder'}
+					</Text>
+					<Touchable onPress={onSubmit} disabled={taskName.length === 0}>
 						<Text
 							bold
 							fontSize={FONT_SIZE.BIG}
-							color={categoryName.length > 0 ? COLORS.white : COLORS.neutral700}
+							color={taskName.length > 0 ? color : COLORS.neutral700}
 						>
 							Save
 						</Text>
@@ -92,18 +103,12 @@ const FuncComponent: React.FC<Props> = () => {
 				<View marginT={60}>
 					<View bg={COLORS.background} padding={DIMS.padding} br={DIMS.br}>
 						<TextField
-							placeholder="Please input title"
-							onChangeText={setCategoryName}
+							placeholder="Please input new reminder"
+							onChangeText={setTaskName}
 							borderWidth={0}
-							value={categoryName}
+							value={taskName}
 						/>
 					</View>
-				</View>
-				<View marginT={40}>
-					<ColorPicker color={color} onPick={setColor} />
-				</View>
-				<View marginT={40}>
-					<IconPicker color={color} icon={iconName} onPick={setIconName} />
 				</View>
 			</View>
 		</ScrollView>

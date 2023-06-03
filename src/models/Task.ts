@@ -1,6 +1,7 @@
 export interface Task {
-  id: number;
-  name: string;
-  note: string;
-  date?: string;
+	id: string;
+	content: string;
+	date?: string;
+	categoryId: string;
+	isCompleted: boolean;
 }

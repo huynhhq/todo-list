@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 // Libraries
 import moment from 'moment';
@@ -19,12 +19,10 @@ import {
 	View,
 	commonStyles,
 } from '@components/uikit';
-import { goModal } from '@helpers/navigation';
+import { goModal, goScreen } from '@helpers/navigation';
 
 const FuncComponent: React.FC = () => {
 	const data = useRecoilValue(MY_CATEGORY_LIST({}));
-
-	useEffect(() => {}, []);
 
 	const generateFixedCategories = useMemo(() => {
 		const totalTask: Task[] = [];
@@ -35,6 +33,9 @@ const FuncComponent: React.FC = () => {
 			const currentCategory = data[i];
 			for (let j = 0; j < currentCategory.tasks.length; j++) {
 				const currentTask = currentCategory.tasks[j];
+				// this task is completed
+				if (currentTask.isCompleted) continue;
+				totalTask.push(currentTask);
 				// user does not apply date for this task
 				if (!currentTask?.date) continue;
 
@@ -46,7 +47,6 @@ const FuncComponent: React.FC = () => {
 				} else {
 					scheduleTasks.push(currentTask);
 				}
-				totalTask.push(currentTask);
 			}
 		}
 
@@ -58,6 +58,7 @@ const FuncComponent: React.FC = () => {
 					count={totalTask.length}
 					provider="FontAwesome"
 					color={COLORS.primary}
+					onPress={() => {}}
 				/>
 				<CategoryItem
 					icon="sun"
@@ -65,6 +66,7 @@ const FuncComponent: React.FC = () => {
 					count={todayTasks.length}
 					provider="Feather"
 					color={COLORS.yellow700}
+					onPress={() => {}}
 				/>
 				<CategoryItem
 					icon="calendar-clock"
@@ -72,6 +74,7 @@ const FuncComponent: React.FC = () => {
 					count={scheduleTasks.length}
 					provider="MaterialCommunityIcons"
 					color={COLORS.red700}
+					onPress={() => {}}
 				/>
 			</>
 		);
@@ -87,13 +90,20 @@ const FuncComponent: React.FC = () => {
 				</View>
 			);
 		}
-		return data?.map(category => (
+		return data?.map((category, index) => (
 			<CategoryItem
+				key={category.id}
 				icon={category.icon}
 				text={category.name}
-				count={category.tasks.length}
+				count={category.tasks.filter(task => task.isCompleted === false).length}
 				provider="FontAwesome"
 				color={category.color}
+				onPress={() =>
+					goScreen('taskManagement', {
+						category,
+						index,
+					})
+				}
 			/>
 		));
 	}, [data]);

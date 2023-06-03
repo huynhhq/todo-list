@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ModalStackParamList } from 'root-stack-params';
 import { createStackNavigator } from '@react-navigation/stack';
-import { AddCategoryModal } from '@containers/Modals';
+import { AddCategoryModal, AddTaskModal } from '@containers/Modals';
 const ModalStack = createStackNavigator<ModalStackParamList>();
 
 const ModalStackNavigator = () => {
@@ -14,6 +14,7 @@ const ModalStackNavigator = () => {
 			}}
 		>
 			<ModalStack.Screen name={'addCategory'} component={AddCategoryModal} />
+			<ModalStack.Screen name={'addTask'} component={AddTaskModal} />
 		</ModalStack.Navigator>
 	);
 };
