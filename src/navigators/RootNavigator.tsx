@@ -59,7 +59,7 @@ export const RootNavigator = () => {
 					<RootStack.Screen
 						name="modal"
 						component={ModalStackNavigator}
-						options={{ presentation: 'transparentModal', headerShown: false }}
+						options={{ presentation: 'modal', headerShown: false }}
 					/>
 				</RootStack.Navigator>
 			</NavigationContainer>

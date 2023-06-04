@@ -105,7 +105,7 @@ const FuncComponent: React.FC = () => {
 	}, [data]);
 
 	const generateMyCategories = useMemo(() => {
-		if (!data) {
+		if (!data || data.length === 0) {
 			return (
 				<View padding={DIMS.padding}>
 					<Text color={COLORS.lightGray} textCenter>
@@ -133,7 +133,10 @@ const FuncComponent: React.FC = () => {
 	}, [data]);
 
 	return (
-		<Container style={commonStyles.container}>
+		<Container
+			safeAreaStyle={{ backgroundColor: COLORS.black }}
+			style={commonStyles.container}
+		>
 			<View marginB={20}>
 				<Text fontSize={40} color="white" textCenter>
 					TODO LIST

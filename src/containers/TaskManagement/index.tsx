@@ -40,7 +40,7 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 	const [myCategoryList, setCategoryList] = useRecoilState(
 		MY_CATEGORY_LIST({}),
 	);
-	const { name, color, icon } = myCategoryList[index];
+	const { name, color, icon } = myCategoryList[index] || {};
 
 	const renderItem = useCallback(
 		(info: ListRenderItemInfo<Task>) => {
@@ -69,7 +69,7 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 				});
 
 			const onDelete = () => {
-				const filteredData = myCategoryList[index].tasks.filter(
+				const filteredData = myCategoryList[index]?.tasks.filter(
 					task => task.id !== item.id,
 				);
 				let myTempList = [...myCategoryList];
@@ -94,14 +94,14 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 	const renderSeparator = useCallback(() => <View height={20} />, []);
 
 	const renderFooterComponent = useCallback(() => {
-		const data = myCategoryList[index].tasks;
-		const checkHasCompletedTask = data.some(item => item.isCompleted === true);
+		const data = myCategoryList[index]?.tasks;
+		const checkHasCompletedTask = data?.some(item => item.isCompleted === true);
 		if (!checkHasCompletedTask) {
 			return <></>;
 		}
 		const completedTasks = data.filter(item => item.isCompleted === true);
 		const deleteAll = () => {
-			const filteredData = myCategoryList[index].tasks.filter(
+			const filteredData = myCategoryList[index]?.tasks?.filter(
 				task => task.isCompleted === false,
 			);
 			let myTempList = [...myCategoryList];
@@ -166,10 +166,12 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 
 	const deleteList = () => {
 		setShowMenu(false);
-		let myTempList = [...myCategoryList];
-		myTempList.splice(index, 1);
-		setCategoryList(myTempList);
 		goBack();
+		setTimeout(() => {
+			let myTempList = [...myCategoryList];
+			myTempList.splice(index, 1);
+			setCategoryList(myTempList);
+		}, 0);
 	};
 
 	const onCancel = () => {
@@ -177,7 +179,10 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 	};
 
 	return (
-		<Container style={commonStyles.container}>
+		<Container
+			safeAreaStyle={{ backgroundColor: COLORS.black }}
+			style={commonStyles.container}
+		>
 			<Header
 				title={name}
 				color={color}
@@ -199,7 +204,7 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 						content: 'Delete list',
 						onPress: () => {
 							Alert.alert(
-								`Are you sure to delete "${category.name}" ?`,
+								`Are you sure to delete "${myCategoryList[index]?.name}" ?`,
 								'This action will remove all reminders in this list.',
 								[
 									{
@@ -227,7 +232,7 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 				</View>
 				<View marginT={20}>
 					<FlatList
-						data={myCategoryList[index].tasks.filter(
+						data={myCategoryList[index]?.tasks?.filter(
 							task => task.isCompleted === false,
 						)}
 						renderItem={renderItem}

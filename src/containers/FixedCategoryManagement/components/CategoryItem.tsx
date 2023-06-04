@@ -34,9 +34,12 @@ const CategoryItem: React.FC<Props> = ({ category, type, index }) => {
 				return availableTasks;
 
 			case 'today':
-				const todayTasks = availableTasks.filter(task =>
-					moment(task?.date).isSame(moment(), 'day'),
-				);
+				const todayTasks = availableTasks.filter(task => {
+					if (task?.date && moment(task?.date).isSame(moment(), 'day')) {
+						return true;
+					}
+					return false;
+				});
 				return todayTasks;
 
 			default:

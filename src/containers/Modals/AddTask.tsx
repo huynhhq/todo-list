@@ -38,10 +38,12 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 		MY_CATEGORY_LIST({}),
 	);
 
-	const [dateEnabled, setDateEnabled] = useState<boolean>(false);
+	const [dateEnabled, setDateEnabled] = useState<boolean>(
+		task?.date ? true : false,
+	);
 	const [taskName, setTaskName] = useState<string>(task.content);
 	const [date, setDate] = useState<string>(
-		moment(new Date()).format('YYYY-MM-DD'),
+		task?.date ?? moment(new Date()).format('YYYY-MM-DD'),
 	);
 
 	const onSubmit = useCallback(() => {

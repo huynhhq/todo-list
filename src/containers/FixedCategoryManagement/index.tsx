@@ -22,6 +22,7 @@ import { ListRenderItemInfo } from 'react-native';
 import CategoryItem from './components/CategoryItem';
 import { useRecoilValue } from 'recoil';
 import { MY_CATEGORY_LIST } from '@states';
+import { COLORS } from '@values';
 
 interface Props extends StackScreenProps<RootStackParamList> {
 	route: RouteProp<RootStackParamList, 'fixedCategoryManagement'>;
@@ -45,7 +46,10 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 	);
 
 	return (
-		<Container style={commonStyles.container}>
+		<Container
+			safeAreaStyle={{ backgroundColor: COLORS.black }}
+			style={commonStyles.container}
+		>
 			<Header title={name} color={color} />
 			<View style={styles.container}>
 				<View style={styles.centerIcon}>
