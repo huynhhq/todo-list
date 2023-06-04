@@ -13,7 +13,11 @@ type Props = {
 const ColorPicker: React.FC<Props> = ({ color = SAMPLE_COLOR[0], onPick }) => {
 	const renderColors = useMemo(() => {
 		return SAMPLE_COLOR.map((sampleColor, index) => (
-			<Touchable key={index} onPress={() => onPick(sampleColor)}>
+			<Touchable
+				testID={`color-btn-${index}`}
+				key={index}
+				onPress={() => onPick(sampleColor)}
+			>
 				<View style={styles.colorItem} bg={sampleColor}>
 					{color === sampleColor && <View style={styles.selectedItem} />}
 				</View>
@@ -21,7 +25,11 @@ const ColorPicker: React.FC<Props> = ({ color = SAMPLE_COLOR[0], onPick }) => {
 		));
 	}, [color, onPick]);
 
-	return <View style={styles.container}>{renderColors}</View>;
+	return (
+		<View testID="color-picker" style={styles.container}>
+			{renderColors}
+		</View>
+	);
 };
 
 export default ColorPicker;
