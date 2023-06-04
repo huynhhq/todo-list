@@ -32,7 +32,7 @@ interface Props extends StackScreenProps<ModalStackParamList> {
 }
 
 const FuncComponent: React.FC<Props> = ({ route }) => {
-	const { category } = route.params;
+	const category = route.params?.category;
 	const mode = !category ? 'new' : 'edit';
 
 	const [myCategoryList, setMyCategoryList] = useRecoilState(

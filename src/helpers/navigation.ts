@@ -42,7 +42,10 @@ function goResetAndNavigation(
 	}
 }
 
-function goScreen(name: keyof RootStackParamList, params = {}) {
+function goScreen(
+	name: keyof RootStackParamList,
+	params?: RootStackParamList[keyof RootStackParamList],
+) {
 	if (_navigator && _navigator.dispatch) {
 		_navigator.dispatch(
 			CommonActions.navigate({
