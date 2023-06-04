@@ -19,7 +19,11 @@ const IconPicker: React.FC<Props> = ({
 }) => {
 	const renderColors = useMemo(() => {
 		return ICON_NAMES.map((sampleIcon, index) => (
-			<Touchable key={index} onPress={() => onPick(sampleIcon)}>
+			<Touchable
+				testID={`icon-btn-${index}`}
+				key={index}
+				onPress={() => onPick(sampleIcon)}
+			>
 				<View
 					style={[
 						styles.colorItem,
@@ -41,7 +45,11 @@ const IconPicker: React.FC<Props> = ({
 		));
 	}, [color, icon, onPick]);
 
-	return <View style={styles.container}>{renderColors}</View>;
+	return (
+		<View testID="icon-picker" style={styles.container}>
+			{renderColors}
+		</View>
+	);
 };
 
 export default IconPicker;
