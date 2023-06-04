@@ -7,7 +7,11 @@ import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { RootStackParamList } from 'root-stack-params';
 import { setTopLevelNavigator } from '@helpers/navigation';
 
-import { HomePage, TaskManagementPage } from '@containers';
+import {
+	HomePage,
+	TaskManagementPage,
+	FixedCategoryManagementPage,
+} from '@containers';
 import ModalStackNavigator from './ModalStack';
 
 const RootStack = createStackNavigator<RootStackParamList>();
@@ -45,6 +49,11 @@ export const RootNavigator = () => {
 					<RootStack.Screen
 						name="taskManagement"
 						component={TaskManagementPage}
+						options={{ headerShown: false }}
+					/>
+					<RootStack.Screen
+						name="fixedCategoryManagement"
+						component={FixedCategoryManagementPage}
 						options={{ headerShown: false }}
 					/>
 					<RootStack.Screen

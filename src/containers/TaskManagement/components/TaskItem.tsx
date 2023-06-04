@@ -2,11 +2,10 @@ import React from 'react';
 
 // Utilities
 import { Task } from '@models';
-import { COLORS } from '@values';
+import { COLORS, FONT_SIZE } from '@values';
 
-// Styles
+// Styles & UI Components
 import styles from '../styles';
-
 import { Touchable, VectorIcons, View, Text } from '@components/uikit';
 
 type Props = {
@@ -71,7 +70,23 @@ const TaskItem: React.FC<Props> = ({
 					</View>
 				)}
 			</View>
-			{task.date && <View>{task.date}</View>}
+			{task.date && (
+				<View flexD="row" alignItems marginL={35} marginT={5}>
+					<VectorIcons
+						name="calendar"
+						color={color}
+						size={12}
+						provider="FontAwesome"
+						style={styles.icon}
+					/>
+					<Text
+						color={task.isCompleted ? COLORS.neutral700 : COLORS.lightGray}
+						fontSize={FONT_SIZE.SMALLER}
+					>
+						{task.date}
+					</Text>
+				</View>
+			)}
 		</>
 	);
 };

@@ -80,12 +80,31 @@ declare module 'custom-ui-kit' {
 }
 declare module 'root-stack-params' {
 	import { Task, Category } from '@models';
+	export type VectorIconProvider =
+		| 'Entypo'
+		| 'EvilsIcons'
+		| 'Feather'
+		| 'FontAwesome'
+		| 'Foundation'
+		| 'Ionicons'
+		| 'MaterialIcons'
+		| 'MaterialCommunityIcons'
+		| 'Octicons'
+		| 'Zocial'
+		| 'SimpleLineIcons';
 
 	export type RootStackParamList = {
 		home: undefined;
 		taskManagement: {
 			category: Category;
 			index: number;
+		};
+		fixedCategoryManagement: {
+			name: string;
+			icon: string;
+			color: string;
+			provider: VectorIconProvider;
+			type: 'all' | 'today' | 'schedule';
 		};
 		modal: ModalStackParamList;
 	};

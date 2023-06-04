@@ -1,8 +1,10 @@
 import React, { useCallback, useState } from 'react';
-import { Alert, StyleSheet } from 'react-native';
+import { Alert, StyleSheet, Switch } from 'react-native';
 
 // Libraries
+import moment from 'moment';
 import { useRecoilState } from 'recoil';
+import { Calendar } from 'react-native-calendars';
 import { RouteProp } from '@react-navigation/native';
 import { StackScreenProps } from '@react-navigation/stack';
 
@@ -27,6 +29,8 @@ interface Props extends StackScreenProps<ModalStackParamList> {
 }
 
 const FuncComponent: React.FC<Props> = ({ route }) => {
+	const today = moment(new Date()).format('YYYY-MM-DD');
+
 	const { task, color, index } = route.params;
 	const mode = task.content.length === 0 ? 'new' : 'edit';
 
@@ -34,8 +38,11 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 		MY_CATEGORY_LIST({}),
 	);
 
+	const [dateEnabled, setDateEnabled] = useState<boolean>(false);
 	const [taskName, setTaskName] = useState<string>(task.content);
-	const [date, setDate] = useState<string | undefined>();
+	const [date, setDate] = useState<string>(
+		moment(new Date()).format('YYYY-MM-DD'),
+	);
 
 	const onSubmit = useCallback(() => {
 		let myTempList = [...myCategoryList];
@@ -47,6 +54,7 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 			myTempList[index].tasks.push({
 				...task,
 				content: taskName,
+				date: dateEnabled ? date : undefined,
 			});
 		} else {
 			const processData = selectedCategory.tasks.map(currentTask => {
@@ -54,6 +62,7 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 					return {
 						...task,
 						content: taskName,
+						date: dateEnabled ? date : undefined,
 					};
 				} else {
 					return task;
@@ -73,7 +82,16 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 				},
 			],
 		);
-	}, [index, mode, myCategoryList, setMyCategoryList, task, taskName]);
+	}, [
+		date,
+		dateEnabled,
+		index,
+		mode,
+		myCategoryList,
+		setMyCategoryList,
+		task,
+		taskName,
+	]);
 
 	return (
 		<ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -101,13 +119,60 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 					</Touchable>
 				</View>
 				<View marginT={60}>
-					<View bg={COLORS.background} padding={DIMS.padding} br={DIMS.br}>
+					<View style={styles.container}>
 						<TextField
 							placeholder="Please input new reminder"
 							onChangeText={setTaskName}
 							borderWidth={0}
 							value={taskName}
 						/>
+					</View>
+					<View style={styles.container}>
+						<View flexD="row">
+							<View flexD="row" alignItems flex>
+								<VectorIcons
+									name="calendar"
+									color={color}
+									size={15}
+									provider="FontAwesome"
+									style={styles.icon}
+								/>
+								<Text color={COLORS.lightGray}>Date</Text>
+							</View>
+							<Switch
+								trackColor={{ false: COLORS.mainGray, true: color }}
+								thumbColor={COLORS.white}
+								ios_backgroundColor="#3e3e3e"
+								onValueChange={() => setDateEnabled(!dateEnabled)}
+								value={dateEnabled}
+							/>
+						</View>
+						{dateEnabled && (
+							<View marginT={10}>
+								<Calendar
+									theme={{
+										backgroundColor: COLORS.background,
+										calendarBackground: COLORS.background,
+										textSectionTitleColor: COLORS.white,
+										dayTextColor: COLORS.white,
+										selectedDayBackgroundColor: color,
+										todayTextColor: color,
+										arrowColor: color,
+										monthTextColor: color,
+									}}
+									onDayPress={day => {
+										setDate(day.dateString);
+									}}
+									markedDates={{
+										[date]: {
+											selected: true,
+											disableTouchEvent: true,
+										},
+									}}
+									minDate={today}
+								/>
+							</View>
+						)}
 					</View>
 				</View>
 			</View>
@@ -130,5 +195,14 @@ const styles = StyleSheet.create({
 	header: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
+	},
+	icon: {
+		marginRight: 15,
+	},
+	container: {
+		backgroundColor: COLORS.background,
+		padding: DIMS.padding,
+		borderRadius: DIMS.br,
+		marginBottom: 20,
 	},
 });

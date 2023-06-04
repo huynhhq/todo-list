@@ -58,7 +58,15 @@ const FuncComponent: React.FC = () => {
 					count={totalTask.length}
 					provider="FontAwesome"
 					color={COLORS.primary}
-					onPress={() => {}}
+					onPress={() =>
+						goScreen('fixedCategoryManagement', {
+							icon: 'inbox',
+							name: 'All',
+							color: COLORS.primary,
+							type: 'all',
+							provider: 'FontAwesome',
+						})
+					}
 				/>
 				<CategoryItem
 					icon="sun"
@@ -66,7 +74,15 @@ const FuncComponent: React.FC = () => {
 					count={todayTasks.length}
 					provider="Feather"
 					color={COLORS.yellow700}
-					onPress={() => {}}
+					onPress={() =>
+						goScreen('fixedCategoryManagement', {
+							icon: 'sun',
+							name: 'Today',
+							color: COLORS.yellow700,
+							type: 'today',
+							provider: 'Feather',
+						})
+					}
 				/>
 				<CategoryItem
 					icon="calendar-clock"
@@ -74,7 +90,15 @@ const FuncComponent: React.FC = () => {
 					count={scheduleTasks.length}
 					provider="MaterialCommunityIcons"
 					color={COLORS.red700}
-					onPress={() => {}}
+					onPress={() =>
+						goScreen('fixedCategoryManagement', {
+							icon: 'calendar-clock',
+							name: 'Tentative Schedule',
+							color: COLORS.red700,
+							type: 'schedule',
+							provider: 'MaterialCommunityIcons',
+						})
+					}
 				/>
 			</>
 		);
