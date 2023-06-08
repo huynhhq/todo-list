@@ -40,7 +40,12 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 	const [myCategoryList, setCategoryList] = useRecoilState(
 		MY_CATEGORY_LIST({}),
 	);
-	const { name, color, icon } = myCategoryList[index] || {};
+	const selectedCategory = myCategoryList.find(item => item.id === category.id);
+	const { name, icon, color } = selectedCategory || {
+		color: category.color,
+		icon: category.icon,
+		name: category.name,
+	};
 
 	const renderItem = useCallback(
 		(info: ListRenderItemInfo<Task>) => {
@@ -80,15 +85,15 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 			return (
 				<TaskItem
 					key={item.id}
-					color={color}
 					task={item}
+					color={color}
 					onComplete={onComplete}
 					onEdit={onEdit}
 					onDelete={onDelete}
 				/>
 			);
 		},
-		[color, index, myCategoryList, setCategoryList],
+		[myCategoryList, index, setCategoryList, color],
 	);
 
 	const renderSeparator = useMemo(() => <View height={20} />, []);
@@ -167,11 +172,10 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 	const deleteList = useCallback(() => {
 		setShowMenu(false);
 		goBack();
-		setTimeout(() => {
-			let myTempList = [...myCategoryList];
-			myTempList.splice(index, 1);
-			setCategoryList(myTempList);
-		}, 0);
+
+		let myTempList = [...myCategoryList];
+		myTempList.splice(index, 1);
+		setCategoryList(myTempList);
 	}, [index, myCategoryList, setCategoryList]);
 
 	const onCancel = () => {
@@ -183,91 +187,97 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 			safeAreaStyle={{ backgroundColor: COLORS.black }}
 			style={commonStyles.container}
 		>
-			<Header
-				title={name}
-				color={color}
-				showMenu={show}
-				setShowMenu={setShowMenu}
-				menus={[
-					{
-						id: 1,
-						content: 'Update list',
-						onPress: () => {
-							goModal('addCategory', {
-								category: myCategoryList[index],
-							});
-							setShowMenu(false);
-						},
-					},
-					{
-						id: 2,
-						content: 'Delete list',
-						onPress: () => {
-							Alert.alert(
-								`Are you sure to delete "${myCategoryList[index]?.name}" ?`,
-								'This action will remove all reminders in this list.',
-								[
-									{
-										text: 'OK',
-										onPress: deleteList,
-									},
-									{
-										text: 'Cancel',
-										onPress: onCancel,
-									},
-								],
-							);
-						},
-					},
-				]}
-			/>
-			<View style={styles.container} onTouchEnd={() => setShowMenu(false)}>
-				<View style={styles.centerIcon}>
-					<VectorIcons
+			{selectedCategory ? (
+				<>
+					<Header
+						title={name}
 						color={color}
-						name={icon}
-						size={40}
-						provider={'FontAwesome'}
-					/>
-				</View>
-				<View marginT={20}>
-					<FlatList
-						data={myCategoryList[index]?.tasks?.filter(
-							task => task.isCompleted === false,
-						)}
-						renderItem={renderItem}
-						ListFooterComponent={renderFooterComponent}
-						separator={renderSeparator}
-					/>
-				</View>
-				<View style={styles.bottomComp}>
-					<Touchable
-						flexD="row"
-						alignItems
-						onPress={() =>
-							goModal('addTask', {
-								task: {
-									id: PrototypeManager.number.uuidv4(),
-									content: '',
-									categoryId: category.id,
-									isCompleted: false,
+						showMenu={show}
+						setShowMenu={setShowMenu}
+						menus={[
+							{
+								id: 1,
+								content: 'Update list',
+								onPress: () => {
+									goModal('addCategory', {
+										category: myCategoryList[index],
+									});
+									setShowMenu(false);
 								},
-								color,
-								index,
-							})
-						}
-					>
-						<VectorIcons
-							name="plus-circle"
-							provider="FontAwesome"
-							color={color}
-							size={20}
-							style={styles.icon}
-						/>
-						<Text color={color}>New Task</Text>
-					</Touchable>
-				</View>
-			</View>
+							},
+							{
+								id: 2,
+								content: 'Delete list',
+								onPress: () => {
+									Alert.alert(
+										`Are you sure to delete "${myCategoryList[index]?.name}" ?`,
+										'This action will remove all reminders in this list.',
+										[
+											{
+												text: 'OK',
+												onPress: deleteList,
+											},
+											{
+												text: 'Cancel',
+												onPress: onCancel,
+											},
+										],
+									);
+								},
+							},
+						]}
+					/>
+					<View style={styles.container} onTouchEnd={() => setShowMenu(false)}>
+						<View style={styles.centerIcon}>
+							<VectorIcons
+								color={color}
+								name={icon}
+								size={40}
+								provider={'FontAwesome'}
+							/>
+						</View>
+						<View marginT={20}>
+							<FlatList
+								data={myCategoryList[index]?.tasks?.filter(
+									task => task.isCompleted === false,
+								)}
+								renderItem={renderItem}
+								ListFooterComponent={renderFooterComponent}
+								separator={renderSeparator}
+							/>
+						</View>
+						<View style={styles.bottomComp}>
+							<Touchable
+								flexD="row"
+								alignItems
+								onPress={() =>
+									goModal('addTask', {
+										task: {
+											id: PrototypeManager.number.uuidv4(),
+											content: '',
+											categoryId: category.id,
+											isCompleted: false,
+										},
+										color,
+										index,
+									})
+								}
+							>
+								<VectorIcons
+									name="plus-circle"
+									provider="FontAwesome"
+									color={color}
+									size={20}
+									style={styles.icon}
+								/>
+								<Text color={color}>New Task</Text>
+							</Touchable>
+						</View>
+					</View>
+				</>
+			) : (
+				<Text color={COLORS.white}>Category not found</Text>
+			)}
 		</Container>
 	);
 };
