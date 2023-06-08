@@ -50,7 +50,7 @@ const CategoryItem: React.FC<Props> = ({ category, type, index }) => {
 		}
 	}, [category.tasks, type]);
 
-	const renderSeparator = useCallback(() => <View height={20} />, []);
+	const renderSeparator = useMemo(() => <View height={20} />, []);
 	const renderItem = useCallback(
 		(info: ListRenderItemInfo<Task>) => {
 			const { item } = info;
@@ -116,7 +116,7 @@ const CategoryItem: React.FC<Props> = ({ category, type, index }) => {
 				<FlatList
 					data={data}
 					renderItem={renderItem}
-					ItemSeparatorComponent={renderSeparator}
+					separator={renderSeparator}
 				/>
 			</View>
 		</View>

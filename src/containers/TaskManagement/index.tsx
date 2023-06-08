@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Alert, ListRenderItemInfo } from 'react-native';
 
 // Libraries
@@ -91,7 +91,7 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 		[color, index, myCategoryList, setCategoryList],
 	);
 
-	const renderSeparator = useCallback(() => <View height={20} />, []);
+	const renderSeparator = useMemo(() => <View height={20} />, []);
 
 	const renderFooterComponent = useCallback(() => {
 		const data = myCategoryList[index]?.tasks;
@@ -148,7 +148,7 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 						<FlatList
 							data={completedTasks}
 							renderItem={renderItem}
-							ItemSeparatorComponent={renderSeparator}
+							separator={renderSeparator}
 						/>
 					</View>
 				)}
@@ -164,7 +164,7 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 		setCategoryList,
 	]);
 
-	const deleteList = () => {
+	const deleteList = useCallback(() => {
 		setShowMenu(false);
 		goBack();
 		setTimeout(() => {
@@ -172,7 +172,7 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 			myTempList.splice(index, 1);
 			setCategoryList(myTempList);
 		}, 0);
-	};
+	},[]);
 
 	const onCancel = () => {
 		setShowMenu(false);
@@ -236,8 +236,8 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 							task => task.isCompleted === false,
 						)}
 						renderItem={renderItem}
-						ItemSeparatorComponent={renderSeparator}
 						ListFooterComponent={renderFooterComponent}
+						separator={renderSeparator}
 					/>
 				</View>
 				<View style={styles.bottomComp}>

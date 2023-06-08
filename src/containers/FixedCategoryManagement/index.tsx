@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 // Libraries
 import { RouteProp } from '@react-navigation/native';
@@ -33,7 +33,7 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 
 	const data = useRecoilValue(MY_CATEGORY_LIST({}));
 
-	const renderSeparator = useCallback(() => <View height={40} />, []);
+	const renderSeparator = useMemo(() => <View height={40} />, []);
 
 	const renderItem = useCallback(
 		(info: ListRenderItemInfo<Category>) => {
@@ -64,7 +64,7 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 					<FlatList
 						data={data}
 						renderItem={renderItem}
-						ItemSeparatorComponent={renderSeparator}
+						separator={renderSeparator}
 					/>
 				</View>
 			</View>
