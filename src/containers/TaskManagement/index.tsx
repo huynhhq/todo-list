@@ -172,7 +172,7 @@ const FuncComponent: React.FC<Props> = ({ route }) => {
 			myTempList.splice(index, 1);
 			setCategoryList(myTempList);
 		}, 0);
-	},[]);
+	}, [index, myCategoryList, setCategoryList]);
 
 	const onCancel = () => {
 		setShowMenu(false);
